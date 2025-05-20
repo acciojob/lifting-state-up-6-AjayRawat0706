@@ -1,36 +1,52 @@
-import React, { useState } from "react";
-import "./../styles/App.css";
-import TodoList from "./TodoList";
+
+import React,{useState} from "react";
+import './../styles/App.css';
 
 const App = () => {
   const [todos, setTodos] = useState([
-    {
-      id: 1,
-      text: "Learn React",
-      completion: false,
-    },
-    {
-      id: 2,
-      text: "Bulid a React app",
-      completion: false,
-    },
-    {
-      id: 3,
-      text: "Deploy the React app",
-      completion: false,
-    },
+    {"title":"Learn React"},
+    {"title":"Build a React App"},
+    {"title":"Deploy the React app"},
   ]);
-  const handleComplete = (id) => {
-    const updatedTodos = todos.map((todo) =>
-      todo.id === id ? { ...todo, completion: true } : todo
-    );
+
+  const handleCompleteTodo = (index) => {
+    const updatedTodos = todos.map((todo, i) => {
+      if (i === index) {
+        return {
+          ...todo,
+          completed: true,
+        };
+      }
+      return todo;
+    });
+
     setTodos(updatedTodos);
   };
+
   return (
-    <div>
-      <TodoList todos={todos} handleComplete={handleComplete} />
+    <div id="main">
+      <h1>Parent component</h1>
+      <ChildComponent todos={todos} handleCompleteTodo={handleCompleteTodo} />
     </div>
   );
-};
+}
 
-export default App;
+const ChildComponent = ({ todos, handleCompleteTodo }) => {
+  return (
+    <div id="child">
+      <h2>Child Component</h2>
+          {
+            todos.map((todo, index) => (
+            <li key={index}>
+              {todo.title}
+              {!todo.completed && (
+                <button onClick={() => handleCompleteTodo(index)}>Complete</button>
+              )}
+            </li>
+          ))
+          }
+    </div>
+  );
+}
+
+export default App
